@@ -55,8 +55,11 @@ using Ujikom.sceneloader;
 
         void ChangeScene(int i)
         {
-            DataBaseController.Instance.SetCurrentPackID(i);
-            SceneLoader.Instance.ChangeScene("Level");
+            if (i == level.answer)
+            { Debug.Log("benar"); }
+            else
+                Debug.Log("salah");
+//            SceneLoader.Instance.ChangeScene("Level");
         }
 
         void GetQuestion()

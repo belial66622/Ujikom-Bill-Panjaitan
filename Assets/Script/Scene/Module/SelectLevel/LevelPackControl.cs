@@ -55,7 +55,7 @@ using Ujikom.sceneloader;
 
         void ChangeScene(int i)
         {
-            Debug.Log(i + " gamescene");
+            Debug.Log(i );
             DataBaseController.Instance.SetCurrentPackID(i);
             SceneLoader.Instance.ChangeScene("Gameplay");
         }
