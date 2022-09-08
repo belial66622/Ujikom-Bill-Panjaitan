@@ -7,23 +7,23 @@ using Ujikom.Data;
 using Ujikom.scriptableobject;
 using Ujikom.sceneloader;
 
-    namespace Ujikom.selectLevel {
-    public class LevelPackControl : MonoBehaviour
+    namespace Ujikom.Gameplay {
+    public class gameControl : MonoBehaviour
     {
-        [SerializeField] List<LevelModel> modelLevel;
+        LevelStruct level;
         Pack[] pack;
         Button[] _button;
         string[] Namelist;
-        int currentpack;
+        int currentpack,currentlevel;
         [SerializeField] GameObject _buttonprefarb;
         // Start is called before the first frame update
        
 
         private void Start()
         {
-            GetCurrentpack();
+            GetQuestion();
             LoadPackList();
-            GetPacksList();
+            GetCurrentQuestion();
             setButton();
             DisplayButton();
         }
@@ -35,7 +35,7 @@ using Ujikom.sceneloader;
 
         void setButton()
         {
-            _button = new Button[modelLevel.Count];
+            _button = new Button[level.choice.Length];
         }
 
         void DisplayButton()
@@ -45,7 +45,7 @@ using Ujikom.sceneloader;
                 int x = i;
                 GameObject temp;
                 temp = Instantiate(_buttonprefarb,transform);
-                temp.GetComponentInChildren<TextMeshProUGUI>().text = modelLevel[i].LevelName;
+                temp.GetComponentInChildren<TextMeshProUGUI>().text = level.choice[i];
                 temp.GetComponentInChildren<Button>().onClick.AddListener(delegate { ChangeScene(x); }) ;
 
             }
@@ -55,32 +55,24 @@ using Ujikom.sceneloader;
 
         void ChangeScene(int i)
         {
-            Debug.Log(i + " gamescene");
             DataBaseController.Instance.SetCurrentPackID(i);
-            SceneLoader.Instance.ChangeScene("Gameplay");
+            SceneLoader.Instance.ChangeScene("Level");
         }
 
-        void GetCurrentpack()
+        void GetQuestion()
         {
             currentpack = DataBaseController.Instance.GetCurrentPackID();
+            currentlevel = DataBaseController.Instance.GetCurrentLevelID();
         }
         void LoadPackList()
         {
             pack = DataBaseController.Instance.GetPackList();
         }
 
-        void GetPacksList()
+        void GetCurrentQuestion()
         {
-            modelLevel = new() ;
-
-            for (int i = 0; i < pack[currentpack].level.Length; i++)
-            {
-                modelLevel.Add(new());
-                modelLevel[i].LevelName = "level " + pack[currentpack].level[i].LevelID;
-                modelLevel[i].LevelID = pack[currentpack].level[i].LevelID;
-                modelLevel[i].IsComplete = false;
-                Debug.Log("jalan");
-            }
+            level = new();
+            level = pack[currentpack].level[currentlevel];
         }
 
 
